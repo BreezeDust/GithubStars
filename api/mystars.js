@@ -5,33 +5,17 @@ var express = require('express');
 var router = express.Router();
 var http = require('http');
 var https = require('https');
-
+var net=require('../tools/NetBase');
 
 router.get('/', function(req, res) {
     res.set({'Content-Type':'text/json','Encodeing':'utf8'});
+    var api="https://api.github.com/users/breezedust/starred";
+    var callBack=net.get(api);
+    callBack.on('end', function(body) {
+        res.send(body);
 
-    var options = {
-        hostname: 'api.github.com',
-        port: 443,
-        path: '/user/starred?access_token=cadff6f26189e1781856d9be3fe8f51499ae6cbb',
-        method: 'GET',
-        headers: {
-            'User-Agent': 'request'
-        }
-    };
-
-    var req = https.request(options, function(getRes){
-        var body = '';
-        getRes.on('data', function(chunk) {
-            body += chunk;
-        });
-        getRes.on('end', function() {
-            res.send(body);
-
-        });
     });
-    req.end();
-    req.on('error',function(e){
+    callBack.on('error',function(e){
         res.send(e.message);
     });
 });
