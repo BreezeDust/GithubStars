@@ -13,7 +13,7 @@ router.get('/', function(req, res) {
     var options = {
         hostname: 'api.github.com',
         port: 443,
-        path: '/users/breezedust/starred',
+        path: '/user/starred?access_token=cadff6f26189e1781856d9be3fe8f51499ae6cbb',
         method: 'GET',
         headers: {
             'User-Agent': 'request'
