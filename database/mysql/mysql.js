@@ -2,7 +2,7 @@
  * Created by BreezeDust on 16/2/22.
  */
 var mysql = require('mysql');
-var config = require("/config");
+var config = require("../../config");
 var pool = mysql.createPool(
     {
         connectionLimit : config.mysql.connectionLimit,
@@ -20,10 +20,15 @@ function query(sql,callback) {
     pool.getConnection(function (err, connection) {
         if (!!err) {
             console.error('[sqlqueryErr] ' + err.stack);
-            connection.release();
+            //connection.release();
             throw err;
         }
         connection.query(sql, function (err, res) {
+            console.log(res);
+            console.log(err);
+            if(callback !=null){
+                callback(err,res);
+            }
             connection.release();
         });
     });
