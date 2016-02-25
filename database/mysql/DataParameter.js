@@ -2,6 +2,7 @@
  * Created by BreezeDust on 16/2/22.
  * sql参数化类
  */
+var mysql = require('mysql');
 function DataParameter(sqlStr){
     this.sqlArray=[]; // sql按照%s分割后的数组
     this.valueArray=[]; // 值数组
@@ -56,11 +57,9 @@ DataParameter.prototype._createSqlStr=function(){
     for(var i=0;i<this.valueCount;i++){
         var value=this.valueArray[i];
         if(typeof (value)==DataParameter.STRING){
-            this.sql=this.sql+"'"+value+"' "+this.sqlArray[count++];
+            value=mysql.escape(value);
         }
-        else{
-            this.sql=this.sql+this.valueArray[i]+" "+this.sqlArray[count++];
-        }
+        this.sql=this.sql+value+" "+this.sqlArray[count++];
     }
 };
 
