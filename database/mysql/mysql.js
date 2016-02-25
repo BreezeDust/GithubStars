@@ -24,8 +24,6 @@ function query(sql,callback) {
             throw err;
         }
         connection.query(sql, function (err, res) {
-            console.log(res);
-            console.log(err);
             if(callback !=null){
                 callback(err,res);
             }

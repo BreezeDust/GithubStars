@@ -4,11 +4,11 @@
  */
 var mysql = require('mysql');
 function DataParameter(sqlStr){
-    this.sqlArray=[]; // sql按照%s分割后的数组
-    this.valueArray=[]; // 值数组
-    this.index = 0; // bind参数时的游标
-    this.valueCount=0; // sql语句传入进来时,真实的参数个数
-    this.sql="";
+    this._sqlArray=[]; // sql按照%s分割后的数组
+    this._valueArray=[]; // 值数组
+    this._index = 0; // bind参数时的游标
+    this._valueCount=0; // sql语句传入进来时,真实的参数个数
+    this._sql="";
     this.__construct(sqlStr);
     return this;
 }
@@ -18,12 +18,12 @@ DataParameter.STRING = "string";
 DataParameter.BOOL = "boolean";
 
 DataParameter.prototype.__construct=function(sqlStr){
-    this.sqlArray=sqlStr.split("%s");
-    this.valueCount=this.sqlArray.length-1;
+    this._sqlArray=sqlStr.split("%s");
+    this._valueCount=this._sqlArray.length-1;
 };
 DataParameter.prototype.bind=function(value,type){
     if(typeof (value)==type){
-        this.valueArray[this.index++]=value;
+        this._valueArray[this._index++]=value;
         return;
     }
     if(!this.checkHasTheType(type)){
@@ -42,24 +42,24 @@ DataParameter.prototype.checkHasTheType=function(type){
     return false;
 };
 DataParameter.prototype.getSql=function(){
-    if (this.index == this.valueCount) {
-        if(this.sql==null || this.sql==""){
+    if (this._index == this._valueCount) {
+        if(this._sql==null || this._sql==""){
             this._createSqlStr();
         }
-        return this.sql;
+        return this._sql;
     }
-    console.log("ERROR: the parame is "+this.valueCount+", you have "+this.index);
+    console.log("ERROR: the parame is "+this._valueCount+", you have "+this._index);
     return "";
 };
 DataParameter.prototype._createSqlStr=function(){
-    this.sql=this.sqlArray[0];
+    this._sql=this._sqlArray[0];
     var count=1;
-    for(var i=0;i<this.valueCount;i++){
-        var value=this.valueArray[i];
+    for(var i=0;i<this._valueCount;i++){
+        var value=this._valueArray[i];
         if(typeof (value)==DataParameter.STRING){
             value=mysql.escape(value);
         }
-        this.sql=this.sql+value+this.sqlArray[count++];
+        this._sql=this._sql+value+this._sqlArray[count++];
     }
 };
 
