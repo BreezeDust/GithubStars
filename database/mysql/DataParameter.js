@@ -59,7 +59,7 @@ DataParameter.prototype._createSqlStr=function(){
         if(typeof (value)==DataParameter.STRING){
             value=mysql.escape(value);
         }
-        this.sql=this.sql+value+" "+this.sqlArray[count++];
+        this.sql=this.sql+value+this.sqlArray[count++];
     }
 };
 
