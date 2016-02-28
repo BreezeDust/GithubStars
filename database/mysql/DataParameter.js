@@ -30,6 +30,9 @@ DataParameter.prototype.bind=function(value,type){
         console.log("ERROR: DataParamenter without type of "+type);
     }
     else{
+        if(typeof(value)=="string"){
+            value="'"+value+"'";
+        }
         console.log("ERROR: value ["+value+"] is not type ["+type+"]");
     }
 };
@@ -48,7 +51,7 @@ DataParameter.prototype.getSql=function(){
         }
         return this._sql;
     }
-    console.log("ERROR: the parame is "+this._valueCount+", you have "+this._index);
+    console.log("ERROR: a total of "+this._valueCount+" parames, you just have "+this._index);
     return "";
 };
 DataParameter.prototype._createSqlStr=function(){
