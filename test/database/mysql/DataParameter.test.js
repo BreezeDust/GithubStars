@@ -1,9 +1,12 @@
 /**
  * Created by BreezeDust on 16/2/25.
  */
-var DataParameter = require("../../../database/mysql/DataParameter");
+var patch=require('path');
+global.APP_PATCH=patch.resolve(__dirname,"../../../");
+/********************************/
+var DataParameter = require(APP_PATCH+"/database/mysql/DataParameter");
 var assert = require('assert');
-describe('DataParameter', function () {
+describe('--->DataParameter', function () {
     it('#normal',function(){
         var sql=new DataParameter("SELECT * FROM table WHERE a=%s AND b=%s AND c=%s AND b=%s");
         sql.bind(1,DataParameter.NUMBER);

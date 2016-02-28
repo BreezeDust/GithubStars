@@ -1,8 +1,8 @@
 /**
  * Created by BreezeDust on 16/2/25.
  */
-var DataParameter=require("../database/mysql/DataParameter");
-var mysql=require("../database/mysql/mysql");
+var DataParameter=require(APP_PATCH+"/database/mysql/DataParameter");
+var mysql=require(APP_PATCH+"/database/mysql/mysql");
 
 function add(jsonData,callBack){
     var data=new DataParameter("INSERT INTO `USERS` (githubToken,userName,userEmail,userIco) VALUES (%s,%s,%s,%s)");

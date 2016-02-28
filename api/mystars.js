@@ -5,7 +5,7 @@ var express = require('express');
 var router = express.Router();
 var http = require('http');
 var https = require('https');
-var net=require('../tools/NetBase');
+var net=require(APP_PATCH+'/tools/NetBase');
 
 router.get('/', function(req, res) {
     res.set({'Content-Type':'text/json','Encodeing':'utf8'});
