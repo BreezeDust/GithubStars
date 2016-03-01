@@ -34,14 +34,14 @@ function get(url,jsonData,headerData){
         // 数据拼接
         var dataStr=QS.stringify(jsonData);
         var newQuery="";
-        if(parseUrl.query==""){
+        if(parseUrl.query=="" || parseUrl.query==null){
             newQuery=dataStr;
         }
         else{
             newQuery=parseUrl.query+"&"+dataStr;
         }
         parseUrl.query=newQuery;
-        parseUrl.path=parseUrl.pathname+parseUrl.query;
+        parseUrl.path=parseUrl.pathname+"?"+parseUrl.query;
     }
     console.log(parseUrl);
     console.log(dataStr);

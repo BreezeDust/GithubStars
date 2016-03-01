@@ -10,6 +10,7 @@ var assert = require('assert');
 describe('--->UserModel', function () {
     it('#add',function(){
         var jsonData={
+            githubID:1,
             githubToken:"testToken",
             userName:"testUserName",
             userEmail:"testUserEmail",

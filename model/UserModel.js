@@ -5,7 +5,8 @@ var DataParameter=require(APP_PATCH+"/database/mysql/DataParameter");
 var mysql=require(APP_PATCH+"/database/mysql/mysql");
 
 function add(jsonData,callBack){
-    var data=new DataParameter("INSERT INTO `USERS` (githubToken,userName,userEmail,userIco) VALUES (%s,%s,%s,%s)");
+    var data=new DataParameter("INSERT INTO `USERS` (githubID,githubToken,userName,userEmail,userIco) VALUES (%s,%s,%s,%s,%s)");
+    data.bind(jsonData.githubID,DataParameter.NUMBER);
     data.bind(jsonData.githubToken,DataParameter.STRING);
     data.bind(jsonData.userName,DataParameter.STRING);
     data.bind(jsonData.userEmail,DataParameter.STRING);
@@ -13,7 +14,8 @@ function add(jsonData,callBack){
     mysql.query(data.getSql(),callBack);
 }
 function updateByUserID(jsonData,callBack){
-    var data=new DataParameter("UPDATE `USERS` SET githubToken=%s,userName=%s,userEmail=%s,userIco=%s WHERE userID=%s");
+    var data=new DataParameter("UPDATE `USERS` SET githubID=%s,githubToken=%s,userName=%s,userEmail=%s,userIco=%s WHERE userID=%s");
+    data.bind(jsonData.githubID,DataParameter.NUMBER);
     data.bind(jsonData.githubToken,DataParameter.STRING);
     data.bind(jsonData.userName,DataParameter.STRING);
     data.bind(jsonData.userEmail,DataParameter.STRING);
@@ -25,6 +27,12 @@ function setGitHubTokenByUserID(jsonData,callBack){
     var data=new DataParameter("UPDATE `USERS` SET githubToken=%s WHERE userID=%s");
     data.bind(jsonData.githubToken,DataParameter.STRING);
     data.bind(jsonData.userID,DataParameter.NUMBER);
+    mysql.query(data.getSql(),callBack);
+}
+function setGitHubTokenByGithubID(jsonData,callBack){
+    var data=new DataParameter("UPDATE `USERS` SET githubToken=%s WHERE githubID=%s");
+    data.bind(jsonData.githubToken,DataParameter.STRING);
+    data.bind(jsonData.githubID,DataParameter.NUMBER);
     mysql.query(data.getSql(),callBack);
 }
 function setUserInfoByGithubToken(jsonData,callBack){
@@ -39,6 +47,11 @@ function setUserInfoByGithubToken(jsonData,callBack){
 function getByUserID(){
     var data=new DataParameter("SELECT * FROM `USERS` WHERE userID=%s");
     data.bind(jsonData.userID,DataParameter.NUMBER);
+    mysql.query(data.getSql(),callBack);
+}
+function getByGithubID(){
+    var data=new DataParameter("SELECT * FROM `USERS` WHERE githubID=%s");
+    data.bind(jsonData.githubID,DataParameter.NUMBER);
     mysql.query(data.getSql(),callBack);
 }
 function getByGithubToken(){
