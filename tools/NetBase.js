@@ -28,7 +28,7 @@ function CallBack(){
  * @param jsonData
  * @returns {*}
  */
-function get(url,jsonData){
+function get(url,jsonData,headerData){
     var parseUrl=URL.parse(url);
     if(jsonData!=null){
         // 数据拼接
@@ -54,6 +54,7 @@ function get(url,jsonData){
             'User-Agent': 'request'
         }
     };
+    setHeader(options,headerData);
     var selectType=checkLinkType(parseUrl);
     console.log(options);
     return sendRequest(options,selectType);
@@ -64,7 +65,7 @@ function get(url,jsonData){
  * @param jsonData
  * @returns {*}
  */
-function post(url,jsonData){
+function post(url,jsonData,headerData){
     var parseUrl=URL.parse(url);
     var dataStr="";
     if(jsonData!=null){
@@ -77,13 +78,20 @@ function post(url,jsonData){
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-            'Content-Length': dataStr.length,
-            'User-Agent': 'request'
+            'Content-Length': dataStr.length
         }
     };
+    setHeader(options,headerData);
     var linkType=checkLinkType(parseUrl);
     console.log(options);
     return sendRequest(options,linkType,dataStr);
+}
+function setHeader(options, headerData) {
+    if (headerData != null) {
+        for (var key in headerData) {
+            options.headers[key]=headerData[key];
+        }
+    }
 }
 /**
  * 处理选择类型
@@ -121,7 +129,7 @@ function sendRequest(options,linkType,postData){
         });
         res.on('end', function() {
             if(callBack.method["end"]!=null){
-                callBack.method["end"](body);
+                callBack.method["end"](body,res);
             }
         });
     };
