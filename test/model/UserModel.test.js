@@ -12,6 +12,7 @@ describe('--->UserModel', function () {
         var jsonData={
             githubID:1,
             githubToken:"testToken",
+            tokenPassword: "******",
             userName:"testUserName",
             userEmail:"testUserEmail",
             userIco:"testUserIco"
@@ -22,7 +23,6 @@ describe('--->UserModel', function () {
             }
             else{
                 return done(res);
-
             }
         });
     });

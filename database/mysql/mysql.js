@@ -21,6 +21,9 @@ function query(sql,callback) {
         if (!!err) {
             console.error('[sqlqueryErr] ' + err.stack);
             //connection.release();
+            if(callback !=null){
+                callback(err,res);
+            }
             throw err;
         }
         connection.query(sql, function (err, res) {

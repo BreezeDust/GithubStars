@@ -6,6 +6,7 @@ var router = express.Router();
 var config = require(APP_PATCH + "/config")
 var net = require(APP_PATCH + '/tools/NetBase');
 var API = require(APP_PATCH + '/GithubAPI');
+var CryptoUtils = require(APP_PATCH + "/tools/CryptoUtils");
 var UserModel = require(APP_PATCH + "/model/UserModel");
 
 
@@ -29,14 +30,22 @@ router.get('/callback', function (req, res) {
         if (postRes.statusCode == 200) {
             var obj = JSON.parse(body);
             console.log("--->", obj.access_token);
-            saveTokenAndUserID(obj.access_token);
+            _saveTokenAndUserInfo(obj.access_token,function(err,res){
+                if(err){
+                    // TODO 写入失败
+                }
+                else{
+                    // TODO 写入成功
+                }
+            });
         } else {
+            // TODO 授权失败
             res.send(body);
         }
     });
 
 });
-function saveTokenAndUserID(token) {
+function _saveTokenAndUserInfo(token,callback) {
     var jsonData = {
         "access_token": token
     };
@@ -52,20 +61,35 @@ function saveTokenAndUserID(token) {
             var jsonData = {
                 githubID: user.id,
                 githubToken: token,
+                tokenPassword: _createTokenPassword(),
                 userName: user.name,
                 userEmail: user.email,
                 userIco: user.avatar_url
             };
-            UserModel.add(jsonData,function(err,res){
+            UserModel.getByGithubID(jsonData.githubID,function(err,res){
                 if(err){
+                    // TODO 写入失败
                     console.log(err);
                 }
                 else{
-                    console.log(res);
+                    //console.log(res.length+" "+res[0]["githubID"]);
+                    if(res.length>0){
+                        // 存在用户
+                        jsonData.userID=res[0]["userID"];
+                        UserModel.updateByUserID(jsonData,callback);
+                    }
+                    else{
+                        // 不存在
+                        UserModel.add(jsonData,callback);
+                    }
                 }
             });
+
+
         }
     });
-
+}
+function _createTokenPassword(){
+    return CryptoUtils.md5("---");
 }
 module.exports = router;
