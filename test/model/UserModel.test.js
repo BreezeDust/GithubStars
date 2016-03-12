@@ -19,7 +19,7 @@ describe('--->UserModel', function () {
         };
         UserModel.add(jsonData,function(err,res){
             if(err){
-                return done(err);
+                throw err;
             }
             else{
                 return done(res);

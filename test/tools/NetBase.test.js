@@ -14,7 +14,7 @@ describe('--->NetBase',function(){
             return done(body);
         });
         callBack.on('error', function (e) {
-            return done(e);
+            throw e;
         });
     });
 });
