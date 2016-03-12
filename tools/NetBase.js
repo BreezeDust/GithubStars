@@ -6,6 +6,9 @@ var http = require('http');
 var https = require('https');
 var URL = require('url');
 var QS = require('querystring');
+
+var events = require('events');
+var emitter = new events.EventEmitter();
 /**
  * 链接类型
  * @type {{HTTP: 1, HTTPS: 2}}
@@ -15,13 +18,6 @@ var LINKTYPE={
     HTTPS:2
 };
 
-function CallBack(){
-    this.method=[];
-    CallBack.prototype.on=function(eventMethod,callback){
-        this.method[eventMethod]=callback;
-    };
-    return this;
-}
 /**
  * 简单get请求
  * @param url
@@ -120,7 +116,6 @@ function checkLinkType(parseUrl){
  * @param postData
  */
 function sendRequest(options,linkType,postData){
-    var callBack=new CallBack();
     // 请求后回调
     var reqCallback=function(res){
         var body = '';
@@ -128,9 +123,7 @@ function sendRequest(options,linkType,postData){
             body += chunk;
         });
         res.on('end', function() {
-            if(callBack.method["end"]!=null){
-                callBack.method["end"](body,res);
-            }
+            emitter.emit("end",body,res);
         });
     };
     var req=null;
@@ -141,16 +134,14 @@ function sendRequest(options,linkType,postData){
         req = https.request(options, reqCallback);
     }
     req.on('error',function(e){
-        if(callBack.method["error"]!=null){
-            callBack.method["error"](e);
-        }
+        emitter.emit("error",e);
     });
     // 处理post请求的数据
     if(postData!=null && typeof(postData)=="string"){
         req.write(postData);
     }
     req.end();
-    return callBack;
+    return emitter;
 }
 
 ///////////////////
