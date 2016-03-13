@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "node server.js"
   },
   "repository": {
@@ -19,6 +19,7 @@
   "homepage": "https://github.com/BreezeDust/GithubStars#readme",
   "dependencies": {
     "express": ">=4.0.0",
-    "mysql": "2.10.x"
+    "mysql": "2.10.x",
+    "mocha": "^2.4.5"
   }
 }
